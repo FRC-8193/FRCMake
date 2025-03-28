@@ -70,7 +70,7 @@ deploy_program() {
     echo "Copy new robot program"
     scp -o ControlPath="$CONTROL_PATH" "$PROGRAM" "$TARGET_USER@$target:$TARGET_DIR/FRCUserProgram"
 
-    for lib in ${LIBRARIES[@}}; do
+    for lib in ${LIBRARIES[@]}; do
 	echo "Copy library $(basename $lib)"
 	echo "  Check if file needs update..."
 
