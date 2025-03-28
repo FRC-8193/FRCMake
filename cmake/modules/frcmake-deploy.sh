@@ -108,7 +108,7 @@ deploy_program() {
     ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" "killall -q netconsole-host || :"
 
     echo "Upload new robotCommand"
-    ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" "echo \"cd $TARGET_DIR && $TARGET_DIR/FRCUserProgram\" > $ROBOTCOMMAND_DIR/robotCommand &&
+    ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" "echo \"cd $TARGET_DIR; $TARGET_DIR/FRCUserProgram\" > $ROBOTCOMMAND_DIR/robotCommand &&
 	    						       chmod a+x $TARGET_DIR/FRCUserProgram &&
 							       chmod a+x $ROBOTCOMMAND_DIR/robotCommand"
 
