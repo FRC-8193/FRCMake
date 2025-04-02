@@ -63,9 +63,10 @@ deploy_program() {
 
     echo "Kill running robot code"
     echo "Create program directory"
-    ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" ". /etc/profile.d/natinst-path.sh;
-    							       /usr/local/bin/frcKillRobot.sh -t;
-							       mkdir -p $TARGET_DIR"
+    ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" ". /etc/profile.d/natinst-path.sh &&
+                                                                export PATH=\"\${PATH}:/usr/local/frc/bin\" &&
+    							                                /usr/local/frc/bin/frcKillRobot.sh -t;
+							                                    mkdir -p $TARGET_DIR"
 
     echo "Copy new robot program"
     scp -o ControlPath="$CONTROL_PATH" "$PROGRAM" "$TARGET_USER@$target:$TARGET_DIR/FRCUserProgram"
@@ -109,13 +110,14 @@ deploy_program() {
 
     echo "Upload new robotCommand"
     ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" "echo \"export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:$TARGET_DIR\"; $TARGET_DIR/FRCUserProgram\" > $ROBOTCOMMAND_DIR/robotCommand &&
-	    						       chmod a+x $TARGET_DIR/FRCUserProgram &&
-							       chmod a+x $ROBOTCOMMAND_DIR/robotCommand"
+	    						                                chmod a+x $TARGET_DIR/FRCUserProgram &&
+							                                    chmod a+x $ROBOTCOMMAND_DIR/robotCommand"
 
     echo "Restart robot code"
     ssh -o ControlPath="$CONTROL_PATH" "$TARGET_USER@$target" "sync && 
-	      						       . /etc/profile.d/natinst-path.sh;
-                                                               /usr/local/frc/bin/frcKillRobot.sh -t -r"
+	      						                                . /etc/profile.d/natinst-path.sh &&
+                                                                export PATH=\"\${PATH}:/usr/local/frc/bin\" &&
+                                                                /usr/local/frc/bin/frcKillRobot.sh -t -r"
 
     stop_ssh_multiplexing "$target"
 }
